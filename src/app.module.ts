@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmConfig } from '@src/config/typeorm.config'
+import { StreamersModule } from '@src/streamers/streamers.module'
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +22,7 @@ import { typeOrmConfig } from '@src/config/typeorm.config'
         return typeOrmConfig(env, configService)
       },
     }),
+    StreamersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
