@@ -4,8 +4,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm'
-
+import { Participation } from '@src/timeline/participation.entity'
 @Entity()
 export class Streamer {
   @PrimaryGeneratedColumn()
@@ -28,4 +29,7 @@ export class Streamer {
 
   @UpdateDateColumn({ nullable: false })
   updatedAt: Date
+
+  @OneToMany(() => Participation, (participation) => participation.streamerId)
+  participations: Participation[]
 }

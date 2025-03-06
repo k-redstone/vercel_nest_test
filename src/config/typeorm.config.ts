@@ -1,6 +1,8 @@
 import { DataSourceOptions } from 'typeorm'
 import { ConfigService } from '@nestjs/config'
 import { Streamer } from '@src/streamers/streamer.entity'
+import { Timeline } from '@src/timeline/timeline.entity'
+import { Participation } from '@src/timeline/participation.entity'
 
 export const typeOrmConfig = (
   env: string,
@@ -15,7 +17,7 @@ export const typeOrmConfig = (
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Streamer],
+        entities: [Streamer, Timeline, Participation],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,
@@ -26,7 +28,7 @@ export const typeOrmConfig = (
       return {
         type: 'sqlite',
         database: 'db.sqlite',
-        entities: [Streamer],
+        entities: [Streamer, Timeline, Participation],
         synchronize: true,
         logging: true,
       }
