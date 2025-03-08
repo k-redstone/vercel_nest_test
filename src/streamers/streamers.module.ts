@@ -7,6 +7,7 @@ import { Streamer } from '@src/streamers/streamer.entity'
 
 @Module({
   imports: [TypeOrmModule.forFeature([Streamer])],
+  exports: [StreamersService],
   providers: [StreamersService],
   controllers: [StreamersController],
 })

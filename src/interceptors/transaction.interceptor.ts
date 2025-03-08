@@ -5,16 +5,16 @@ import {
   CallHandler,
   HttpException,
   InternalServerErrorException,
-  applyDecorators,
+  Injectable,
 } from '@nestjs/common'
-import { catchError, mergeMap, Observable, tap } from 'rxjs'
+import { catchError, Observable, tap } from 'rxjs'
 
 import { DataSource } from 'typeorm'
 
 export function Transactional() {
-  return applyDecorators(UseInterceptors(TransactionInterceptor))
+  return UseInterceptors(TransactionInterceptor)
 }
-
+@Injectable()
 export class TransactionInterceptor implements NestInterceptor {
   constructor(private readonly dataSource: DataSource) {}
 
@@ -26,7 +26,6 @@ export class TransactionInterceptor implements NestInterceptor {
 
     await queryRunner.connect()
     await queryRunner.startTransaction()
-
     return next.handle().pipe(
       catchError(async (error) => {
         await queryRunner.rollbackTransaction()
@@ -39,7 +38,8 @@ export class TransactionInterceptor implements NestInterceptor {
         }
       }),
 
-      mergeMap(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      tap(async () => {
         await queryRunner.commitTransaction()
         await queryRunner.release()
       }),

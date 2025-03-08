@@ -1,24 +1,16 @@
+import { Type } from 'class-transformer'
 import {
-  IsString,
-  IsOptional,
-  IsDateString,
   IsArray,
+  IsDateString,
   IsNotEmpty,
+  IsOptional,
+  IsString,
   ValidateNested,
-  IsInt,
 } from 'class-validator'
 
-import { Type } from 'class-transformer'
+import { ParticipantDto } from '@src/timeline/dtos/create-timeline.dto'
 
-export class ParticipantDto {
-  @IsNotEmpty()
-  streamerId: number
-
-  @IsInt()
-  playHour: number
-}
-
-export class CreateTimelineDto {
+export class UpdateTimelineDto {
   @IsOptional()
   @IsString()
   title: string
@@ -27,9 +19,11 @@ export class CreateTimelineDto {
   @IsString()
   description: string
 
+  @IsOptional()
   @IsDateString()
   date: Date
 
+  @IsOptional()
   @IsArray()
   @IsNotEmpty()
   @ValidateNested({ each: true })
