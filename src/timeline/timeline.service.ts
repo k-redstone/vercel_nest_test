@@ -133,14 +133,14 @@ export class TimelineService {
       const newParticipationEntities: Participation[] = []
 
       for (const participant of participants) {
-        // 기존 참여자 업데이트
+        // 기존 스트리머 업데이트
         if (existingMap.has(participant.streamerId)) {
           const existingParticipation = existingMap.get(participant.streamerId)!
           existingParticipation.playHour = participant.playHour
           await this.participationRepo.save(existingParticipation)
           existingMap.delete(participant.streamerId)
         } else {
-          // 새로운 참여자 추가
+          // 새로운 스트리머 추가
           const streamer = await this.streamersService.findStreamerById(
             participant.streamerId,
           )
