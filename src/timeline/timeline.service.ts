@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -26,18 +27,22 @@ export class TimelineService {
   ) {}
 
   async getTimelineById(timelineId: number) {
-    if (!timelineId) return null
+    if (!timelineId) throw new BadRequestException('Invalid timelineId')
 
-    return this.timelineRepo.findOneBy({ timelineId })
+    return this.timelineRepo.findOneBy({ timelineId }) ?? null
   }
 
   async getTimelineWithParticipants(timelineId: number) {
-    if (!timelineId) return null
+    if (!timelineId) throw new BadRequestException('Invalid timelineId')
 
-    return this.timelineRepo.findOne({
+    const timeline = await this.timelineRepo.findOne({
       where: { timelineId },
       relations: ['participations', 'participations.streamer'],
     })
+
+    if (!timeline) throw new NotFoundException('Timeline not found')
+
+    return timeline
   }
 
   async getTimelineList(page: number = 1, limit: number = 10) {
@@ -68,17 +73,15 @@ export class TimelineService {
       const participants = createTimelineDto.participants
 
       // 스트리머 존재 확인
-      for (const participantDto of participants) {
-        const streamer = await this.streamersService.findStreamerById(
-          participantDto.streamerId,
-        )
-
-        if (!streamer) {
-          throw new NotFoundException(
-            `Streamer with ID ${participantDto.streamerId} not found`,
+      await Promise.all(
+        participants.map(async (p) => {
+          const streamer = await this.streamersService.findStreamerById(
+            p.streamerId,
           )
-        }
-      }
+          if (!streamer)
+            throw new NotFoundException(`Streamer ID ${p.streamerId} not found`)
+        }),
+      )
 
       // 타임라인 생성
       const timeline = this.timelineRepo.create(createTimelineDto)
@@ -86,7 +89,6 @@ export class TimelineService {
 
       // 스트리머 추가
       const participations = participants.map((participantDto) => {
-        console.log(participantDto)
         return this.participationRepo.create({
           streamer: { streamerId: participantDto.streamerId },
           timeline: { timelineId: savedTimeline.timelineId },
@@ -97,7 +99,7 @@ export class TimelineService {
       // 저장
       await this.participationRepo.save(participations)
 
-      return timeline
+      return savedTimeline
     } catch (error) {
       throw new InternalServerErrorException(error)
     }
@@ -120,45 +122,43 @@ export class TimelineService {
       await this.timelineRepo.save(timeline)
 
       const existingParticipations = await this.participationRepo.find({
-        where: { timeline: timelineId === timelineId },
-        relations: {
-          streamer: true,
-        },
+        where: { timeline: { timelineId } },
+        relations: ['streamer'],
       })
+
+      const existingMap = new Map(
+        existingParticipations.map((p) => [p.streamer.streamerId, p]),
+      )
 
       const newParticipationEntities: Participation[] = []
 
       for (const participant of participants) {
-        const existingParticipation = existingParticipations.find(
-          (p) => p.streamer.streamerId === participant.streamerId,
-        )
-        // 이미 존재한다면 업데이트
-        if (existingParticipation) {
+        // 기존 참여자 업데이트
+        if (existingMap.has(participant.streamerId)) {
+          const existingParticipation = existingMap.get(participant.streamerId)!
           existingParticipation.playHour = participant.playHour
           await this.participationRepo.save(existingParticipation)
+          existingMap.delete(participant.streamerId)
         } else {
-          // 없다면 추가
+          // 새로운 참여자 추가
           const streamer = await this.streamersService.findStreamerById(
             participant.streamerId,
           )
 
           if (!streamer) throw new NotFoundException('streamer not found')
 
-          const participation = this.participationRepo.create({
-            streamer: { streamerId: streamer.streamerId },
-            timeline: { timelineId },
-            playHour: participant.playHour,
-          })
-
-          newParticipationEntities.push(participation)
+          newParticipationEntities.push(
+            this.participationRepo.create({
+              streamer: { streamerId: streamer.streamerId },
+              timeline: { timelineId },
+              playHour: participant.playHour,
+            }),
+          )
         }
       }
 
-      // 제거할 스트리머 필터링
-      const participationToRemove = existingParticipations.filter(
-        (p) =>
-          !participants.some((np) => np.streamerId === p.streamer.streamerId),
-      )
+      // 제거할 스트리머 배열화
+      const participationToRemove = Array.from(existingMap.values())
 
       // 스트리머 삭제
       if (participationToRemove.length > 0) {
