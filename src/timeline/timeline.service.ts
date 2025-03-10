@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { Between, Repository } from 'typeorm'
 
 import { InjectRepository } from '@nestjs/typeorm'
 
@@ -45,9 +45,10 @@ export class TimelineService {
     return timeline
   }
 
-  async getTimelineList(page: number = 1, limit: number = 10) {
+  async getTimelineList(page: string = '1', limit: number = 10) {
+    const currentPage = parseInt(page)
     const [timelines, totalData] = await this.timelineRepo.findAndCount({
-      skip: (page - 1) * limit,
+      skip: (currentPage - 1) * limit,
       take: limit,
       order: { date: 'DESC' },
       relations: ['participations', 'participations.streamer'],
@@ -55,10 +56,28 @@ export class TimelineService {
 
     return {
       totalData,
-      currentPage: page,
+      currentPage,
       totalPage: Math.ceil(totalData / limit),
       data: timelines,
     }
+  }
+
+  async getTimelineByDate(date: string) {
+    const parsedDate = new Date(date)
+
+    if (isNaN(parsedDate.getTime())) {
+      throw new BadRequestException('Invalid date format')
+    }
+
+    const startOfDay = new Date(parsedDate.setHours(0, 0, 0, 0))
+    const endOfDay = new Date(parsedDate.setHours(23, 59, 59, 999))
+
+    const timeline = await this.timelineRepo.find({
+      where: { date: Between(startOfDay, endOfDay) },
+      order: { date: 'DESC' },
+      relations: ['participations', 'participations.streamer'],
+    })
+    return timeline
   }
 
   async getAllTimelineDates() {

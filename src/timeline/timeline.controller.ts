@@ -27,15 +27,22 @@ export class TimelineController {
   @HttpCode(HttpStatus.OK)
   async getTimelineDate() {
     const dates = await this.timelineService.getAllTimelineDates()
-    return { dates }
+    return dates
   }
 
   // 타임라인 전체 조회(페이지네이션)
   @Get()
   @HttpCode(HttpStatus.OK)
-  getTimelineAll(@Query('page') page: number = 1) {
-    const timelines = this.timelineService.getTimelineList(page)
-    return { timelines }
+  async getTimelineAll(@Query('page') page: string = '1') {
+    const timelines = await this.timelineService.getTimelineList(page)
+    return timelines
+  }
+
+  @Get('/:date')
+  @HttpCode(HttpStatus.OK)
+  async getTimelineByDate(@Param('date') date: string) {
+    const timelines = await this.timelineService.getTimelineByDate(date)
+    return timelines
   }
 
   // 타임라인 단일 조회()
@@ -49,7 +56,7 @@ export class TimelineController {
         `타임라인 ID ${timelineId}를 찾을 수 없습니다.`,
       )
     }
-    return { timeline }
+    return timeline
   }
 
   // 타임라인 생성
