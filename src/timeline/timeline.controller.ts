@@ -26,8 +26,10 @@ export class TimelineController {
   getTimelineAll() {}
 
   // 타임라인 단일 조회()
-  @Get()
-  getTimelineById() {}
+  @Get('/:timelineId')
+  getTimelineById(@Param('timelineId') timelineId: number) {
+    return this.timelineService.getTimelineWithParticipants(timelineId)
+  }
 
   // 타임라인 생성
   @Transactional()

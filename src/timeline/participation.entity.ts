@@ -19,12 +19,12 @@ export class Participation {
   @ManyToOne(() => Streamer, (streamer) => streamer.participations, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'streamerId' })
-  streamerId: Streamer
+  @JoinColumn({ name: 'streamerId', referencedColumnName: 'streamerId' })
+  streamer: Streamer
 
   @ManyToOne(() => Timeline, (Timeline) => Timeline.participations, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'timelineId' })
-  timelineId: Timeline
+  @JoinColumn({ name: 'timelineId', referencedColumnName: 'timelineId' })
+  timeline: Timeline
 }

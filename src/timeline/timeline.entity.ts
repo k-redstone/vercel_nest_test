@@ -29,6 +29,6 @@ export class Timeline {
   @UpdateDateColumn({ nullable: false })
   updatedAt: Date
 
-  @OneToMany(() => Participation, (participation) => participation.timelineId)
+  @OneToMany(() => Participation, (participation) => participation.timeline)
   participations: Participation[]
 }

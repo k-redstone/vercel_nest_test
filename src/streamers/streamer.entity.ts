@@ -30,6 +30,6 @@ export class Streamer {
   @UpdateDateColumn({ nullable: false })
   updatedAt: Date
 
-  @OneToMany(() => Participation, (participation) => participation.streamerId)
+  @OneToMany(() => Participation, (participation) => participation.streamer)
   participations: Participation[]
 }
