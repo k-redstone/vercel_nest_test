@@ -8,7 +8,6 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 
 import { Timeline } from '@src/timeline/timeline.entity'
-// import { Streamer } from '@src/streamers/streamer.entity'
 
 import {
   CreateTimelineDto,
@@ -21,7 +20,6 @@ import { StreamersService } from '@src/streamers/streamers.service'
 export class TimelineService {
   constructor(
     @InjectRepository(Timeline) private timelineRepo: Repository<Timeline>,
-    // @InjectRepository(Streamer) private streamerRepo: Repository<Streamer>,
     @InjectRepository(Participation)
     private participationRepo: Repository<Participation>,
     private readonly streamersService: StreamersService,
@@ -39,6 +37,29 @@ export class TimelineService {
     return this.timelineRepo.findOne({
       where: { timelineId },
       relations: ['participations', 'participations.streamer'],
+    })
+  }
+
+  async getTimelineList(page: number = 1, limit: number = 10) {
+    const [timelines, totalData] = await this.timelineRepo.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { date: 'DESC' },
+      relations: ['participations', 'participations.streamer'],
+    })
+
+    return {
+      totalData,
+      currentPage: page,
+      totalPage: Math.ceil(totalData / limit),
+      data: timelines,
+    }
+  }
+
+  async getAllTimelineDates() {
+    return await this.timelineRepo.find({
+      select: ['timelineId', 'date'],
+      order: { date: 'DESC' },
     })
   }
 
@@ -75,6 +96,8 @@ export class TimelineService {
 
       // 저장
       await this.participationRepo.save(participations)
+
+      return timeline
     } catch (error) {
       throw new InternalServerErrorException(error)
     }

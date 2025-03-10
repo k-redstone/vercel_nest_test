@@ -9,6 +9,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common'
 import { TimelineService } from '@src/timeline/timeline.service'
 
@@ -21,21 +22,46 @@ import { Transactional } from '@src/interceptors/transaction.interceptor'
 export class TimelineController {
   constructor(private readonly timelineService: TimelineService) {}
 
+  // 타임라인 날짜 전체 조회(달력에 사용할)
+  @Get('/date')
+  @HttpCode(HttpStatus.OK)
+  async getTimelineDate() {
+    const dates = await this.timelineService.getAllTimelineDates()
+    return { dates }
+  }
+
   // 타임라인 전체 조회(페이지네이션)
   @Get()
-  getTimelineAll() {}
+  @HttpCode(HttpStatus.OK)
+  getTimelineAll(@Query('page') page: number = 1) {
+    const timelines = this.timelineService.getTimelineList(page)
+    return { timelines }
+  }
 
   // 타임라인 단일 조회()
   @Get('/:timelineId')
-  getTimelineById(@Param('timelineId') timelineId: number) {
-    return this.timelineService.getTimelineWithParticipants(timelineId)
+  @HttpCode(HttpStatus.OK)
+  async getTimelineById(@Param('timelineId') timelineId: number) {
+    const timeline =
+      await this.timelineService.getTimelineWithParticipants(timelineId)
+    if (!timeline) {
+      throw new NotFoundException(
+        `타임라인 ID ${timelineId}를 찾을 수 없습니다.`,
+      )
+    }
+    return { timeline }
   }
 
   // 타임라인 생성
   @Transactional()
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async createTimeline(@Body() body: CreateTimelineDto) {
-    await this.timelineService.createTimeline(body)
+    const newTimeline = await this.timelineService.createTimeline(body)
+    return {
+      message: '타임라인이 성공적으로 생성되었습니다.',
+      timelineId: newTimeline.timelineId,
+    }
   }
 
   // 타임라인 수정
@@ -53,8 +79,4 @@ export class TimelineController {
     )
     return { message: '타임라인 정보가 업데이트 되었습니다.' }
   }
-
-  // 타임라인 날짜 전체 조회(달력에 사용할)
-  @Get()
-  getTimelineByDate() {}
 }
