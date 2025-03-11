@@ -8,8 +8,9 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common'
-
+import { GetStreamersDto } from '@src/streamers/dtos/streamer.dto'
 import { StreamersService } from '@src/streamers/streamers.service'
 import { CreateStreamerDto } from '@src/streamers/dtos/create-streamer.dto'
 import { UpdateStreamerDto } from '@src/streamers/dtos/update-streamer.dto'
@@ -37,5 +38,11 @@ export class StreamersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeStreamer(@Param('streamerId') streamerId: number) {
     await this.streamersService.remove(streamerId)
+  }
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getStreamersWithParticipationStats(@Query() query: GetStreamersDto) {
+    return await this.streamersService.getStreamersWithParticipationStats(query)
   }
 }

@@ -23,13 +23,17 @@ export class TimelineService {
     @InjectRepository(Timeline) private timelineRepo: Repository<Timeline>,
     @InjectRepository(Participation)
     private participationRepo: Repository<Participation>,
-    private readonly streamersService: StreamersService,
+    private streamersService: StreamersService,
   ) {}
 
   async getTimelineById(timelineId: number) {
     if (!timelineId) throw new BadRequestException('Invalid timelineId')
 
     return this.timelineRepo.findOneBy({ timelineId }) ?? null
+  }
+
+  async getToTalTimeline(): Promise<number> {
+    return await this.timelineRepo.count()
   }
 
   async getTimelineWithParticipants(timelineId: number) {

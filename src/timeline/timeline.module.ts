@@ -5,19 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { Timeline } from '@src/timeline/timeline.entity'
 import { Participation } from '@src/timeline/participation.entity'
-// import { Streamer } from '@src/streamers/streamer.entity'
 
 import { StreamersModule } from '@src/streamers/streamers.module'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Timeline,
-      Participation,
-      // Streamer,
-    ]),
+    TypeOrmModule.forFeature([Timeline, Participation]),
     StreamersModule,
   ],
+  exports: [TimelineService],
   controllers: [TimelineController],
   providers: [TimelineService],
 })

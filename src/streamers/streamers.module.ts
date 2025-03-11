@@ -4,9 +4,14 @@ import { StreamersController } from '@src/streamers/streamers.controller'
 
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Streamer } from '@src/streamers/streamer.entity'
+import { Timeline } from '@src/timeline/timeline.entity'
+// import { TimelineModule } from '@src/timeline/timeline.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Streamer])],
+  imports: [
+    TypeOrmModule.forFeature([Streamer, Timeline]),
+    // forwardRef(() => TimelineModule),
+  ],
   exports: [StreamersService],
   providers: [StreamersService],
   controllers: [StreamersController],
