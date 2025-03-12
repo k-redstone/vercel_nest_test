@@ -3,6 +3,8 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common'
 import { Between, Repository } from 'typeorm'
 
@@ -23,6 +25,7 @@ export class TimelineService {
     @InjectRepository(Timeline) private timelineRepo: Repository<Timeline>,
     @InjectRepository(Participation)
     private participationRepo: Repository<Participation>,
+    @Inject(forwardRef(() => StreamersService))
     private streamersService: StreamersService,
   ) {}
 

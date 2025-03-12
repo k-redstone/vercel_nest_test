@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TimelineController } from '@src/timeline/timeline.controller'
 import { TimelineService } from '@src/timeline/timeline.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -11,7 +11,7 @@ import { StreamersModule } from '@src/streamers/streamers.module'
 @Module({
   imports: [
     TypeOrmModule.forFeature([Timeline, Participation]),
-    StreamersModule,
+    forwardRef(() => StreamersModule),
   ],
   exports: [TimelineService],
   controllers: [TimelineController],

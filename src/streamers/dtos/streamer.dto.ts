@@ -15,10 +15,30 @@ export class StreamerStatsDto {
 }
 
 export class StreamerWithStatsDto extends StreamerDto {
-  totalGames: number
   totalParticipations: number
   totalParticipationTime: number
   participationRatio: number
+}
+
+export class CoPlayersDto {
+  nickname: string
+  count: number
+}
+
+export class MonthlyParticipationDto {
+  yearMonth: string
+  count: number
+}
+
+export class GetStreamerProfileDto extends StreamerWithStatsDto {
+  timelines: {
+    timelineId: number
+    title: string
+    description: string
+    date: string
+  }[]
+  coPlayers: CoPlayersDto[]
+  monthlyParticipation: MonthlyParticipationDto[]
 }
 
 export class GetStreamersDto {

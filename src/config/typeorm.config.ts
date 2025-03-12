@@ -21,6 +21,7 @@ export const typeOrmConfig = (
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,
+        timezone: 'Asia/Seoul',
       }
 
     case 'development':

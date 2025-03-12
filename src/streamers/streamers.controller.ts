@@ -14,7 +14,7 @@ import { GetStreamersDto } from '@src/streamers/dtos/streamer.dto'
 import { StreamersService } from '@src/streamers/streamers.service'
 import { CreateStreamerDto } from '@src/streamers/dtos/create-streamer.dto'
 import { UpdateStreamerDto } from '@src/streamers/dtos/update-streamer.dto'
-
+import { TimelineService } from '@src/timeline/timeline.service'
 @Controller('streamer')
 export class StreamersController {
   constructor(private readonly streamersService: StreamersService) {}
@@ -38,6 +38,12 @@ export class StreamersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeStreamer(@Param('streamerId') streamerId: number) {
     await this.streamersService.remove(streamerId)
+  }
+
+  @Get('/:streamerId')
+  @HttpCode(HttpStatus.OK)
+  async getStreamerProfile(@Param('streamerId') streamerId: number) {
+    return await this.streamersService.getStreamerProfile(streamerId)
   }
 
   @Get()
