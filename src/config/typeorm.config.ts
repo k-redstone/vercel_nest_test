@@ -11,7 +11,7 @@ export const typeOrmConfig = (
   switch (env) {
     case 'production':
       return {
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get('DB_HOST'),
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USERNAME'),
@@ -21,17 +21,23 @@ export const typeOrmConfig = (
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,
-        timezone: 'Asia/Seoul',
+        useUTC: true,
       }
 
     case 'development':
     default:
       return {
-        type: 'sqlite',
-        database: 'db.sqlite',
+        type: 'postgres',
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
         entities: [Streamer, Timeline, Participation],
+        migrations: ['src/migrations/*.ts'],
         synchronize: true,
         logging: true,
+        useUTC: true,
       }
   }
 }

@@ -13,7 +13,7 @@ export class Participation {
   @PrimaryGeneratedColumn()
   participationId: number
 
-  @Column({ type: 'int', default: 0, nullable: false })
+  @Column({ type: 'float', default: 0, nullable: false })
   playHour: number
 
   @ManyToOne(() => Streamer, (streamer) => streamer.participations, {

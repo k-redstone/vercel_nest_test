@@ -76,15 +76,15 @@ export class StreamersService {
     const statsQuery = this.repo
       .createQueryBuilder('streamer')
       .select([
-        'streamer.streamerId As streamerId',
-        'streamer.nickname As nickname',
-        'streamer.profileImageUrl As profileImageUrl',
-        'streamer.hashId As hashId',
-        'streamer.role As role',
+        'streamer.streamerId As "streamerId"',
+        'streamer.nickname As "nickname"',
+        'streamer.profileImageUrl As "profileImageUrl"',
+        'streamer.hashId As "hashId"',
+        'streamer.role As "role"',
         // 총 게임 참여 횟수
-        'COUNT(DISTINCT participation.timelineId) AS totalParticipations',
+        'COUNT(DISTINCT participation.timelineId) AS "totalParticipations"',
         // 총 참여 시간
-        'SUM(participation.playHour) AS totalParticipationTime',
+        'SUM(participation.playHour) AS "totalParticipationTime"',
       ])
       .leftJoin('streamer.participations', 'participation')
       .leftJoin('participation.timeline', 'timeline')
@@ -105,7 +105,7 @@ export class StreamersService {
       .leftJoinAndSelect('timeline.participations', 'participation')
       .leftJoinAndSelect('participation.streamer', 'streamer')
       .where(
-        'timeline.timelineId IN (SELECT timelineId FROM participation WHERE streamerId = :streamerId)',
+        'timeline.timelineId IN (SELECT "timelineId" FROM participation WHERE "streamerId" = :streamerId)',
         { streamerId },
       )
       .getMany()
@@ -127,7 +127,7 @@ export class StreamersService {
       .innerJoin('participation.streamer', 'streamer')
       .where('participation.streamerId != :streamerId', { streamerId }) // 자기 자신은 제외
       .andWhere(
-        'timeline.timelineId IN (SELECT timelineId FROM participation WHERE streamerId = :streamerId)',
+        'timeline.timelineId IN (SELECT "timelineId" FROM participation WHERE "streamerId" = :streamerId)',
         { streamerId },
       ) // 같은 타임라인에 참여한 스트리머
       .groupBy('streamer.nickname')
@@ -144,11 +144,11 @@ export class StreamersService {
       .where('participation.streamerId = :streamerId', { streamerId })
       .andWhere('timeline.date >= :sixMonthsAgo', { sixMonthsAgo })
       .select([
-        `strftime('%Y-%m', timeline.date) AS yearMonth`, // SQLite에서 월별로 날짜를 포맷팅
+        `TO_CHAR(timeline.date, 'YYYY-MM') AS "yearMonth"`,
         `COUNT(DISTINCT timeline.timelineId) AS count`,
       ])
-      .groupBy('yearMonth')
-      .orderBy('yearMonth', 'ASC')
+      .groupBy('"yearMonth"')
+      .orderBy('"yearMonth"', 'ASC')
       .getRawMany()
 
     return {
@@ -180,15 +180,15 @@ export class StreamersService {
     const query = this.repo
       .createQueryBuilder('streamer')
       .select([
-        'streamer.streamerId As streamerId',
-        'streamer.nickname As nickname',
-        'streamer.profileImageUrl As profileImageUrl',
-        'streamer.hashId As hashId',
-        'streamer.role As role',
+        'streamer.streamerId As "streamerId"',
+        'streamer.nickname As "nickname"',
+        'streamer.profileImageUrl As "profileImageUrl"',
+        'streamer.hashId As "hashId"',
+        'streamer.role As "role"',
         // 총 게임 참여 횟수
-        'COUNT(DISTINCT participation.timelineId) AS totalParticipations',
+        'COUNT(DISTINCT participation.timelineId) AS "totalParticipations"',
         // 총 참여 시간
-        'SUM(participation.playHour) AS totalParticipationTime',
+        'SUM(participation.playHour) AS "totalParticipationTime"',
       ])
       .leftJoin('streamer.participations', 'participation')
       .leftJoin('participation.timeline', 'timeline')
@@ -201,7 +201,8 @@ export class StreamersService {
     }
 
     const streamers: StreamerWithStatsDto[] = await query
-      .orderBy(sortField, sortOrder)
+      .orderBy(`"${sortField}"`, sortOrder)
+      .addOrderBy(`"totalParticipationTime"`, 'DESC')
       .getRawMany()
 
     // 계산된 비율 및 총 참여 시간 등 리턴

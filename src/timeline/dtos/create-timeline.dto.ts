@@ -5,7 +5,7 @@ import {
   IsArray,
   IsNotEmpty,
   ValidateNested,
-  IsInt,
+  IsNumber,
 } from 'class-validator'
 
 import { Type } from 'class-transformer'
@@ -14,7 +14,7 @@ export class ParticipantDto {
   @IsNotEmpty()
   streamerId: number
 
-  @IsInt()
+  @IsNumber()
   playHour: number
 }
 
