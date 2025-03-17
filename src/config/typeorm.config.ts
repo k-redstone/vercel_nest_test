@@ -34,8 +34,8 @@ export const typeOrmConfig = (
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         entities: [Streamer, Timeline, Participation],
-        migrations: ['src/migrations/*.ts'],
-        synchronize: true,
+        migrations: ['dist/migrations/*.js'],
+        synchronize: false,
         logging: true,
         useUTC: true,
       }

@@ -200,6 +200,21 @@ export class StreamersService {
       })
     }
 
+    if (sortField === 'totalParticipationTime') {
+      const streamers: StreamerWithStatsDto[] = await query
+        .orderBy(`"${sortField}"`, sortOrder)
+        .getRawMany()
+
+      // 계산된 비율 및 총 참여 시간 등 리턴
+      return streamers.map((streamer) => ({
+        ...streamer,
+        totalParticipations: Number(streamer.totalParticipations) || 0,
+        totalParticipationTime: Number(streamer.totalParticipationTime) || 0,
+        participationRatio: totalGames
+          ? streamer.totalParticipations / totalGames
+          : 0,
+      }))
+    }
     const streamers: StreamerWithStatsDto[] = await query
       .orderBy(`"${sortField}"`, sortOrder)
       .addOrderBy(`"totalParticipationTime"`, 'DESC')
