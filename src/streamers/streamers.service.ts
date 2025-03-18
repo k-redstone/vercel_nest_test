@@ -108,6 +108,8 @@ export class StreamersService {
         'timeline.timelineId IN (SELECT "timelineId" FROM participation WHERE "streamerId" = :streamerId)',
         { streamerId },
       )
+      .orderBy('timeline.date', 'DESC')
+      .addOrderBy('streamer.streamerId', 'ASC')
       .getMany()
 
     const timelineDetails = timelines.map((timeline) => ({
