@@ -10,6 +10,7 @@ import {
   HttpCode,
   HttpStatus,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common'
 import { TimelineService } from '@src/timeline/timeline.service'
 
@@ -17,6 +18,8 @@ import { CreateTimelineDto } from '@src/timeline/dtos/create-timeline.dto'
 import { UpdateTimelineDto } from '@src/timeline/dtos/update-timieline.dto'
 
 import { Transactional } from '@src/interceptors/transaction.interceptor'
+
+import { DenyGuard } from '@src/guards/deny.guard'
 
 @Controller('timeline')
 export class TimelineController {
@@ -60,6 +63,7 @@ export class TimelineController {
   }
 
   // 타임라인 생성
+  @UseGuards(DenyGuard)
   @Transactional()
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -72,6 +76,7 @@ export class TimelineController {
   }
 
   // 타임라인 수정
+  @UseGuards(DenyGuard)
   @Transactional()
   @Patch('/:timelineId')
   @HttpCode(HttpStatus.OK)

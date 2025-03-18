@@ -9,21 +9,26 @@ import {
   HttpCode,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common'
 import { GetStreamersDto } from '@src/streamers/dtos/streamer.dto'
 import { StreamersService } from '@src/streamers/streamers.service'
 import { CreateStreamerDto } from '@src/streamers/dtos/create-streamer.dto'
 import { UpdateStreamerDto } from '@src/streamers/dtos/update-streamer.dto'
-import { TimelineService } from '@src/timeline/timeline.service'
+
+import { DenyGuard } from '@src/guards/deny.guard'
+
 @Controller('streamer')
 export class StreamersController {
   constructor(private readonly streamersService: StreamersService) {}
 
+  @UseGuards(DenyGuard)
   @Post()
   async createStreamer(@Body() body: CreateStreamerDto) {
     return await this.streamersService.create(body)
   }
 
+  @UseGuards(DenyGuard)
   @Patch('/:streamerId')
   @HttpCode(HttpStatus.OK)
   async updateStreamer(
@@ -34,6 +39,7 @@ export class StreamersController {
     return { message: '스트리머 정보가 업데이트되었습니다.' }
   }
 
+  @UseGuards(DenyGuard)
   @Delete('/:streamerId')
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeStreamer(@Param('streamerId') streamerId: number) {
