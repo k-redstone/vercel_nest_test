@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { Streamer } from '@src/streamers/streamer.entity'
 import { Timeline } from '@src/timeline/timeline.entity'
 import { Participation } from '@src/timeline/participation.entity'
-
+import { ChangelogEntity } from '@src/changelogs/entities/changelog.entity'
 export const typeOrmConfig = (
   env: string,
   configService: ConfigService,
@@ -17,7 +17,7 @@ export const typeOrmConfig = (
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Streamer, Timeline, Participation],
+        entities: [Streamer, Timeline, Participation, ChangelogEntity],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,
@@ -33,7 +33,7 @@ export const typeOrmConfig = (
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Streamer, Timeline, Participation],
+        entities: [Streamer, Timeline, Participation, ChangelogEntity],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,

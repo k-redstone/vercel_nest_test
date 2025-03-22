@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { typeOrmConfig } from '@src/config/typeorm.config'
 import { StreamersModule } from '@src/streamers/streamers.module'
 import { TimelineModule } from '@src/timeline/timeline.module'
+import { ChangelogsModule } from './changelogs/changelogs.module'
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TimelineModule } from '@src/timeline/timeline.module'
     }),
     StreamersModule,
     TimelineModule,
+    ChangelogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
