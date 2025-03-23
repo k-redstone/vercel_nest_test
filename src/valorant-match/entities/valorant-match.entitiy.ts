@@ -9,8 +9,10 @@ import {
 import {
   teamTypeKeys,
   matchTypeKeys,
+  valorantMapKeys,
   MatchTypeUnion,
   TeamTypeUnion,
+  ValorantMapUnion,
 } from '@src/valorant-match/types/valorant-match'
 
 @Entity('valorant-match')
@@ -26,6 +28,13 @@ export class ValorantMatchEntity {
 
   @Column({ type: 'enum', enum: Object.values(teamTypeKeys), nullable: false })
   winningTeam: TeamTypeUnion
+
+  @Column({
+    type: 'enum',
+    enum: Object.values(valorantMapKeys),
+    nullable: false,
+  })
+  map: ValorantMapUnion
 
   @Column({ type: 'integer', default: 0 })
   blueScore: number

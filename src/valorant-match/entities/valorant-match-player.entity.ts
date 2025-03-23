@@ -1,9 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 import {
+  valorantTierKeys,
   valorantAgentKeys,
   teamTypeKeys,
   TeamTypeUnion,
   ValorantAgentUnion,
+  ValorantTierUnion,
 } from '@src/valorant-match/types/valorant-match'
 
 @Entity('valorant_match_player')
@@ -27,6 +29,13 @@ export class ValorantMatchPlayerEntity {
   })
   agent: ValorantAgentUnion
 
+  @Column({
+    type: 'enum',
+    enum: Object.values(valorantTierKeys),
+    nullable: false,
+  })
+  tier: ValorantTierUnion
+
   @Column({ type: 'integer', default: 0 })
   avgCombatScore: number
 
@@ -38,9 +47,6 @@ export class ValorantMatchPlayerEntity {
 
   @Column({ type: 'integer', default: 0 })
   assists: number
-
-  @Column({ type: 'integer', default: 0 })
-  playerRating: number
 
   @Column({ type: 'integer', default: 0 })
   efficiencyRating: number
