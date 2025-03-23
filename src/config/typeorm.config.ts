@@ -4,6 +4,10 @@ import { Streamer } from '@src/streamers/streamer.entity'
 import { Timeline } from '@src/timeline/timeline.entity'
 import { Participation } from '@src/timeline/participation.entity'
 import { ChangelogEntity } from '@src/changelogs/entities/changelog.entity'
+
+import { ValorantMatchEntity } from '@src/valorant-match/entities/valorant-match.entitiy'
+import { ValorantMatchPlayerEntity } from '@src/valorant-match/entities/valorant-match-player.entity'
+
 export const typeOrmConfig = (
   env: string,
   configService: ConfigService,
@@ -17,7 +21,14 @@ export const typeOrmConfig = (
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Streamer, Timeline, Participation, ChangelogEntity],
+        entities: [
+          Streamer,
+          Timeline,
+          Participation,
+          ChangelogEntity,
+          ValorantMatchEntity,
+          ValorantMatchPlayerEntity,
+        ],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,
@@ -33,7 +44,14 @@ export const typeOrmConfig = (
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Streamer, Timeline, Participation, ChangelogEntity],
+        entities: [
+          Streamer,
+          Timeline,
+          Participation,
+          ChangelogEntity,
+          ValorantMatchEntity,
+          ValorantMatchPlayerEntity,
+        ],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
         logging: true,

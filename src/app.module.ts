@@ -9,6 +9,7 @@ import { typeOrmConfig } from '@src/config/typeorm.config'
 import { StreamersModule } from '@src/streamers/streamers.module'
 import { TimelineModule } from '@src/timeline/timeline.module'
 import { ChangelogsModule } from './changelogs/changelogs.module'
+import { ValorantMatchModule } from './valorant-match/valorant-match.module'
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ChangelogsModule } from './changelogs/changelogs.module'
     StreamersModule,
     TimelineModule,
     ChangelogsModule,
+    ValorantMatchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
