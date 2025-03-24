@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm'
 import {
   valorantTierKeys,
   valorantAgentKeys,
@@ -7,6 +13,9 @@ import {
   ValorantAgentUnion,
   ValorantTierUnion,
 } from '@src/valorant-match/types/valorant-match'
+
+import { Streamer } from '@src/streamers/streamer.entity'
+import { ValorantMatchEntity } from '@src/valorant-match/entities/valorant-match.entitiy'
 
 @Entity('valorant_match_player')
 export class ValorantMatchPlayerEntity {
@@ -59,4 +68,12 @@ export class ValorantMatchPlayerEntity {
 
   @Column({ type: 'integer', default: 0 })
   defuse: number
+
+  @ManyToOne(() => Streamer, { nullable: true })
+  @JoinColumn({ name: 'streamerId' })
+  streamer?: Streamer
+
+  @ManyToOne(() => ValorantMatchEntity, (match) => match.players)
+  @JoinColumn({ name: 'matchId' })
+  match: ValorantMatchEntity
 }

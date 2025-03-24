@@ -4,6 +4,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm'
 
 import {
@@ -14,8 +16,9 @@ import {
   TeamTypeUnion,
   ValorantMapUnion,
 } from '@src/valorant-match/types/valorant-match'
+import { ValorantMatchPlayerEntity } from '@src/valorant-match/entities/valorant-match-player.entity'
 
-@Entity('valorant-match')
+@Entity('valorant_match')
 export class ValorantMatchEntity {
   @PrimaryGeneratedColumn()
   matchId: number
@@ -50,4 +53,10 @@ export class ValorantMatchEntity {
 
   @UpdateDateColumn({ nullable: false })
   updatedAt: Date
+
+  @OneToMany(
+    () => ValorantMatchPlayerEntity,
+    (valorant_match_player) => valorant_match_player.match,
+  )
+  players: ValorantMatchPlayerEntity[]
 }
