@@ -6,6 +6,7 @@ export const matchTypeKeys = {
 export const teamTypeKeys = {
   RED: 'RED',
   BLUE: 'BLUE',
+  DRAW: 'DRAW',
 }
 
 export const valorantAgentKeys = {

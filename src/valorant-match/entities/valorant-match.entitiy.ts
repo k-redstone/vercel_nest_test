@@ -48,6 +48,9 @@ export class ValorantMatchEntity {
   @Column({ nullable: false })
   date: Date
 
+  @Column({ nullable: true, default: null })
+  matchDuration?: number
+
   @CreateDateColumn({ nullable: false })
   createdAt: Date
 

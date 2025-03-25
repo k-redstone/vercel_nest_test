@@ -153,6 +153,9 @@ export class ValorantMatchDetailDto {
   date: Date
 
   @Expose()
+  matchDuration?: number
+
+  @Expose()
   @Type(() => ValorantMatchPlayerDto)
   players: ValorantMatchPlayerDto
 }
