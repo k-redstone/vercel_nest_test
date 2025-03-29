@@ -6,71 +6,6 @@ import {
   TeamTypeUnion,
   MatchTypeUnion,
 } from '@src/valorant-match/types/valorant-match'
-import { ValorantMatchEntity } from '@src/valorant-match/entities/valorant-match.entitiy'
-import { ValorantMatchPlayerEntity } from '@src/valorant-match/entities/valorant-match-player.entity'
-
-// export class ValorantMatchCLS {
-//   matchId: number
-//   timelineId?: number
-//   matchType: MatchTypeUnion
-//   winningTeam: TeamTypeUnion
-//   map: ValorantMapUnion
-//   score: { blue: number; red: number }
-//   date: Date
-//   players: {
-//     BLUE: ValorantMatchPlayerDto[]
-//     RED: ValorantMatchPlayerDto[]
-//   }
-
-//   constructor(
-//     match: ValorantMatchEntity,
-//     players: ValorantMatchPlayerEntity[],
-//   ) {
-//     this.matchId = match.matchId
-//     this.timelineId = match.timelineId
-//     this.matchType = match.matchType
-//     this.winningTeam = match.winningTeam
-//     this.map = match.map
-//     this.score = { blue: match.blueScore, red: match.redScore }
-//     this.date = match.date
-
-//     const bluePlayers = players.filter((player) => player.team === 'BLUE')
-//     const redPlayers = players.filter((player) => player.team === 'RED')
-//     this.players = {
-//       BLUE: bluePlayers.map(this.mapPlayer),
-//       RED: redPlayers.map(this.mapPlayer),
-//     }
-//   }
-
-//   private mapPlayer(
-//     this: void,
-//     player: ValorantMatchPlayerEntity,
-//   ): ValorantMatchPlayerDto {
-//     return {
-//       playerId: player.playerId,
-//       matchId: player.matchId,
-//       streamerId: player.streamerId,
-//       team: player.team,
-//       agent: player.agent,
-//       tier: player.tier,
-//       stats: {
-//         avgCombatScore: player.avgCombatScore,
-//         kills: player.kills,
-//         deaths: player.deaths,
-//         assists: player.assists,
-//         efficiencyRating: player.efficiencyRating,
-//         firstKill: player.firstKill,
-//         plant: player.plant,
-//         defuse: player.defuse,
-//       },
-//       streamer: {
-//         streamerId: player.streamer?.streamerId,
-//         nickname: player.streamer?.nickname,
-//         profileImageUrl: player.streamer?.profileImageUrl,
-//       },
-//     }
-//   }
-// }
 
 class ValorantMatchStreamerDto {
   @Expose()
@@ -111,17 +46,6 @@ class ValorantMatchPlayerDto {
   @Expose()
   defuse: number
 
-  // stats: {
-  //   avgCombatScore: number
-  //   kills: number
-  //   deaths: number
-  //   assists: number
-  //   efficiencyRating: number
-  //   firstKill: number
-  //   plant: number
-  //   defuse: number
-  // }
-
   @Expose()
   @Type(() => ValorantMatchStreamerDto)
   streamer?: ValorantMatchStreamerDto
@@ -158,4 +82,16 @@ export class ValorantMatchDetailDto {
   @Expose()
   @Type(() => ValorantMatchPlayerDto)
   players: ValorantMatchPlayerDto
+}
+
+export class ValorantMatchPageDto {
+  @Expose()
+  currentPage: number
+
+  @Expose()
+  totalPage: number
+
+  @Expose()
+  @Type(() => ValorantMatchDetailDto)
+  data: ValorantMatchDetailDto
 }
