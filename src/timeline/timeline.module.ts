@@ -10,7 +10,7 @@ import { StreamersModule } from '@src/streamers/streamers.module'
 import { AuthModule } from '@src/auth/auth.module'
 @Module({
   imports: [
-    // AuthModule,
+    AuthModule,
     TypeOrmModule.forFeature([Timeline, Participation]),
     forwardRef(() => StreamersModule),
   ],
