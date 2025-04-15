@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity('user')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -14,6 +14,6 @@ export class User {
   @Column({ default: false })
   isAdmin: boolean
 
-  @Column({ nullable: true })
-  refreshToken: string
+  @Column({ type: 'varchar', nullable: true })
+  refreshToken: string | null
 }

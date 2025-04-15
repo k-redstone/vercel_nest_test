@@ -7,9 +7,10 @@ import { Timeline } from '@src/timeline/timeline.entity'
 import { Participation } from '@src/timeline/participation.entity'
 
 import { StreamersModule } from '@src/streamers/streamers.module'
-
+import { AuthModule } from '@src/auth/auth.module'
 @Module({
   imports: [
+    // AuthModule,
     TypeOrmModule.forFeature([Timeline, Participation]),
     forwardRef(() => StreamersModule),
   ],

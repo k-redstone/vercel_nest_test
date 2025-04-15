@@ -4,7 +4,7 @@ import { Streamer } from '@src/streamers/streamer.entity'
 import { Timeline } from '@src/timeline/timeline.entity'
 import { Participation } from '@src/timeline/participation.entity'
 import { ChangelogEntity } from '@src/changelogs/entities/changelog.entity'
-
+import { UserEntity } from '@src/user/entities/user.entity'
 import { ValorantMatchEntity } from '@src/valorant-match/entities/valorant-match.entitiy'
 import { ValorantMatchPlayerEntity } from '@src/valorant-match/entities/valorant-match-player.entity'
 
@@ -28,6 +28,7 @@ export const typeOrmConfig = (
           ChangelogEntity,
           ValorantMatchEntity,
           ValorantMatchPlayerEntity,
+          UserEntity,
         ],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
@@ -51,6 +52,7 @@ export const typeOrmConfig = (
           ChangelogEntity,
           ValorantMatchEntity,
           ValorantMatchPlayerEntity,
+          UserEntity,
         ],
         migrations: ['dist/migrations/*.js'],
         synchronize: false,
