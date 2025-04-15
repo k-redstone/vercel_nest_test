@@ -10,6 +10,8 @@ import { StreamersModule } from '@src/streamers/streamers.module'
 import { TimelineModule } from '@src/timeline/timeline.module'
 import { ChangelogsModule } from './changelogs/changelogs.module'
 import { ValorantMatchModule } from './valorant-match/valorant-match.module'
+import { AuthModule } from './auth/auth.module'
+import { UserModule } from './user/user.module'
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ValorantMatchModule } from './valorant-match/valorant-match.module'
     TimelineModule,
     ChangelogsModule,
     ValorantMatchModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
