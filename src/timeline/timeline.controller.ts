@@ -21,6 +21,8 @@ import { Transactional } from '@src/interceptors/transaction.interceptor'
 
 import { DenyGuard } from '@src/guards/deny.guard'
 
+import { JwtAuthGuard } from '@src/auth/guards/jwt-auth.guard'
+
 @Controller('timeline')
 export class TimelineController {
   constructor(private readonly timelineService: TimelineService) {}
@@ -72,6 +74,15 @@ export class TimelineController {
     return {
       message: '타임라인이 성공적으로 생성되었습니다.',
       timelineId: newTimeline.timelineId,
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/test')
+  @HttpCode(HttpStatus.CREATED)
+  test() {
+    return {
+      message: 'deny',
     }
   }
 
