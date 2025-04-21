@@ -55,7 +55,7 @@ export class TimelineController {
     return timelines
   }
 
-  @Get('/:date')
+  @Get('/date/:date')
   @HttpCode(HttpStatus.OK)
   async getTimelineByDate(@Param('date') date: string) {
     const timelines = await this.timelineService.getTimelineByDate(date)
