@@ -47,6 +47,13 @@ export class StreamersController {
     await this.streamersService.remove(streamerId)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('/all')
+  @HttpCode(HttpStatus.OK)
+  async getAllStreamer() {
+    return await this.streamersService.getAllStreamer()
+  }
+
   @Get('/:streamerId')
   @HttpCode(HttpStatus.OK)
   async getStreamerProfile(@Param('streamerId') streamerId: number) {
