@@ -10,25 +10,26 @@ import {
   HttpStatus,
   Query,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import { GetStreamersDto } from '@src/streamers/dtos/streamer.dto'
 import { StreamersService } from '@src/streamers/streamers.service'
 import { CreateStreamerDto } from '@src/streamers/dtos/create-streamer.dto'
 import { UpdateStreamerDto } from '@src/streamers/dtos/update-streamer.dto'
 
-import { DenyGuard } from '@src/guards/deny.guard'
+import { JwtAuthGuard } from '@src/auth/guards/jwt-auth.guard'
 
 @Controller('streamer')
 export class StreamersController {
   constructor(private readonly streamersService: StreamersService) {}
 
-  @UseGuards(DenyGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createStreamer(@Body() body: CreateStreamerDto) {
     return await this.streamersService.create(body)
   }
 
-  @UseGuards(DenyGuard)
+  @UseGuards(JwtAuthGuard)
   @Patch('/:streamerId')
   @HttpCode(HttpStatus.OK)
   async updateStreamer(
@@ -39,7 +40,7 @@ export class StreamersController {
     return { message: '스트리머 정보가 업데이트되었습니다.' }
   }
 
-  @UseGuards(DenyGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete('/:streamerId')
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeStreamer(@Param('streamerId') streamerId: number) {

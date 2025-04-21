@@ -13,4 +13,8 @@ export class CreateStreamerDto {
   @IsNotEmpty({ message: '프로필 이미지는 필수 입력 값입니다.' })
   @IsString({ message: '프로필은 문자열이어야 합니다.' })
   profileImageUrl: string
+
+  @IsOptional()
+  @IsString({ message: '역할은 문자열이어야 합니다.' })
+  role: string
 }
