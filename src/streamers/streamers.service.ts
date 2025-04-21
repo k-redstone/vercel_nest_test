@@ -232,4 +232,8 @@ export class StreamersService {
         : 0,
     }))
   }
+
+  async getAllStreamer() {
+    return await this.repo.find()
+  }
 }

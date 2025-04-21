@@ -19,8 +19,6 @@ import { UpdateTimelineDto } from '@src/timeline/dtos/update-timieline.dto'
 
 import { Transactional } from '@src/interceptors/transaction.interceptor'
 
-import { DenyGuard } from '@src/guards/deny.guard'
-
 import { JwtAuthGuard } from '@src/auth/guards/jwt-auth.guard'
 
 @Controller('timeline')
@@ -33,6 +31,20 @@ export class TimelineController {
   async getTimelineDate() {
     const dates = await this.timelineService.getAllTimelineDates()
     return dates
+  }
+
+  // 타임라인 단일 조회()
+  @Get('/:timelineId')
+  @HttpCode(HttpStatus.OK)
+  async getTimelineById(@Param('timelineId') timelineId: number) {
+    const timeline =
+      await this.timelineService.getTimelineWithParticipants(timelineId)
+    if (!timeline) {
+      throw new NotFoundException(
+        `타임라인 ID ${timelineId}를 찾을 수 없습니다.`,
+      )
+    }
+    return timeline
   }
 
   // 타임라인 전체 조회(페이지네이션)
@@ -50,22 +62,8 @@ export class TimelineController {
     return timelines
   }
 
-  // 타임라인 단일 조회()
-  @Get('/:timelineId')
-  @HttpCode(HttpStatus.OK)
-  async getTimelineById(@Param('timelineId') timelineId: number) {
-    const timeline =
-      await this.timelineService.getTimelineWithParticipants(timelineId)
-    if (!timeline) {
-      throw new NotFoundException(
-        `타임라인 ID ${timelineId}를 찾을 수 없습니다.`,
-      )
-    }
-    return timeline
-  }
-
   // 타임라인 생성
-  @UseGuards(DenyGuard)
+  @UseGuards(JwtAuthGuard)
   @Transactional()
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -77,17 +75,8 @@ export class TimelineController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/test')
-  @HttpCode(HttpStatus.CREATED)
-  test() {
-    return {
-      message: 'deny',
-    }
-  }
-
   // 타임라인 수정
-  @UseGuards(DenyGuard)
+  @UseGuards(JwtAuthGuard)
   @Transactional()
   @Patch('/:timelineId')
   @HttpCode(HttpStatus.OK)

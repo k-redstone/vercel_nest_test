@@ -26,7 +26,8 @@
     "typeorm:run:prod": "yarn run typeorm:prod migration:run",
     "typeorm:revert:dev": "yarn run typeorm:dev migration:revert",
     "typeorm:revert:prod": "yarn run typeorm:prod migration:revert",
-    "create-admin:dev": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register src/scripts/create-admin.ts"
+    "create-admin:dev": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register src/scripts/create-admin.ts",
+    "create-admin:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register src/scripts/create-admin.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

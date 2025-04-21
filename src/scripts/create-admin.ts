@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core'
-import { AppModule } from '@src/app.module'
-import { UserService } from '@src/user/user.service'
 
+import { UserService } from '@src/user/user.service'
+import { AdminCliModule } from '@src/scripts/admin-cli.module'
 import * as bcrypt from 'bcrypt'
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule)
+  const app = await NestFactory.createApplicationContext(AdminCliModule)
   const usersService = app.get(UserService)
 
   const userId = process.argv[2]

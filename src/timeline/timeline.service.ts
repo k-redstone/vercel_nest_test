@@ -57,7 +57,7 @@ export class TimelineService {
     const [timelines, totalData] = await this.timelineRepo.findAndCount({
       skip: (currentPage - 1) * limit,
       take: limit,
-      order: { date: 'DESC' },
+      order: { date: 'DESC', timelineId: 'DESC' },
       relations: ['participations', 'participations.streamer'],
     })
 
