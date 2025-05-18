@@ -2,7 +2,7 @@
   "name": "saebaldong",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "k-redstone <che0618@naver.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -102,5 +102,7 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/k-redstone/vercel_nest_test.git"
 }
